@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #080d1b;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      padding: 30px 20px;
+      border: 1px solid #29365c;
+      border-radius: 20px;
+      background: #10182b;
+    }
+
+    h1 {
+      color: #8b9dff;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #b8c2dc;
+      line-height: 1.6;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 13px 22px;
+      border: 0;
+      border-radius: 10px;
+      background: #6578ff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 20px;
+      color: #9fffd2;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h1>NEXUS AI</h1>
+
+    <p>Your ideas. Your intelligence. Your future.</p>
+
+    <p>Welcome to NEXUS AI 2.0.</p>
+
+    <button onclick="showMessage()">
+      Start Exploring
+    </button>
+
+    <p id="message"></p>
+  </main>
+
+  <script>
+    function showMessage() {
+      document.getElementById("message").textContent =
+        "Welcome, explorer! NEXUS AI is just getting started.";
+    }
+  </script>
+</body>
+</html>
