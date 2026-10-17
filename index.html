@@ -4,6 +4,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS AI 2.0</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080d1b;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 18px;
+      border-bottom: 1px solid #263252;
+      background: #10182b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #637bff, #a45cff);
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      color: #9baaca;
+      font-size: 12px;
+    }
+
+    .status {
+      margin-left: auto;
+      color: #9fffd2;
+      font-size: 11px;
+    }
+
+    main {
+      max-width: 760px;
+      margin: auto;
+      padding: 20px 14px;
+    }
+
+    .intro {
+      text-align: center;
+      padding: 18px 0;
+    }
+
+    .intro h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .intro p {
+      color: #aab7d3;
+      font-size: 14px;
+    }
+
+    #chat {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 180px;
+      padding: 16px 0;
+    }
+
+    .message {
+      max-width: 88%;
+      padding: 13px 15px;
+      border-radius: 16px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #3549a8;
+      border-bottom-right-radius: 4px;
+    }
+
+    .assistant {
+      align-self: flex-start;
+      background: #151f36;
+      border: 1px solid #293858;
+      border-bottom-left-radius: 4px;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #a9b8ff;
+    }
+
+    .demo-warning {
+      font-size: 12px;
+      color: #ffd58a;
+      margin-top: 8px;
+    }
+
+    .composer {
+      position: sticky;
+      bottom: 0;
+      padding: 12px 0 18px;
+      background: #080d1b;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid #334266;
+      border-radius: 15px;
+      background: #111a2e;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px;
+      border: none;
+      outline: none;
+      color: white;
+      background: transparent;
+      font-size: 16px;
+    }
+
+    input::placeholder {
+      color: #8492b2;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 0 17px;
+      background: #687aff;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      opacity: 0.8;
+    }
+
+    #error {
+      min-height: 18px;
+      color: #ff9eaa;
+      font-size: 12px;
+      padding: 5px 4px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      color: #7886a6;
+      font-size: 11px;
+    }
+
+    @media (max-width: 400px) {
+      .intro h2 {
+        font-size: 24px;
+      }
+
+      .status {
+        font-size: 10px;
+      }
+
+      button {
+        padding: 0 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">N</div>
+
+    <div>
+      <h1>NEXUS AI</h1>
+      <p>Your ideas. Your future.</p>
+    </div>
+
+    <div class="status">DEMO MODE</div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>What can I help you with?</h2>
+      <p>Welcome to your own AI chat interface.</p>
+    </section>
+
+    <section id="chat" aria-live="polite">
+      <div class="message assistant">
+        <span class="label">NEXUS AI · DEMO</span>
+        Hey! Welcome to NEXUS AI 2.0.
+        Send me a message to test the interface.
+
+        <div class="demo-warning">
+          Demo reply only — real AI is not connected yet.
+        </div>
+      </div>
+    </section>
+
+    <section class="composer">
+      <form id="chat-form" class="input-row">
+        <input
+          id="user-input"
+          type="text"
+          placeholder="Message NEXUS AI..."
+          aria-label="Your message"
+          autocomplete="off"
+        >
+        <button type="submit">Send ↑</button>
+      </form>
+
+      <div id="error" role="status"></div>
+
+      <footer>
+        NEXUS AI 2.0 · Independent project · Demo version
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("user-input");
+    const chat = document.getElementById("chat");
+    const error = document.getElementById("error");
+
+    function addMessage(text, type) {
+      const bubble = document.createElement("div");
+      bubble.className = "message " + type;
+
+      const content = document.createElement("span");
+      content.textContent = text;
+      bubble.appendChild(content);
+
+      if (type === "assistant") {
+        const label = document.createElement("span");
+        label.className = "label";
+        label.textContent = "NEXUS AI · DEMO";
+        bubble.prepend(label);
+
+        const warning = document.createElement("div");
+        warning.className = "demo-warning";
+        warning.textContent =
+          "Demo reply only — not generated by a real AI model.";
+        bubble.appendChild(warning);
+      }
+
+      chat.appendChild(bubble);
+    }
+
+    function getDemoReply(message) {
+      const text = message.toLowerCase();
+
+      if (text.includes("hello") || text.includes("hi")) {
+        return "Hello! Welcome to NEXUS AI. This is a sample greeting.";
+      }
+
+      if (text.includes("your name") || text.includes("who are you")) {
+        return "I'm NEXUS AI, your own AI website project. Real AI is not connected yet.";
+      }
+
+      if (text.includes("help")) {
+        return "I'm here to help! This is a demo, so my replies are pre-written examples.";
+      }
+
+      return "You said: " + message +
+        "\n\nThis is a sample response. A real AI model will be connected in a future version.";
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const message = input.value.trim();
+      error.textContent = "";
+
+      if (!message) {
+        error.textContent = "Please type a message first.";
+        input.focus();
+        return;
+      }
+
+      addMessage(message, "user");
+      input.value = "";
+
+      const reply = getDemoReply(message);
+      addMessage(reply, "assistant");
+      input.focus();
+    });
+  </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEXUS AI</title>
 
   <style>
