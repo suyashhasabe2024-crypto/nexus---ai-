@@ -1,4 +1,39 @@
 
+const NEXUS_API =
+  "https://delicate-waterfall-13b8.suyashhasabe2024.workers.dev";
+
+async function askNexus(message) {
+  const response = await fetch(NEXUS_API, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: message
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Request failed");
+  }
+
+  return data.reply;
+}
+
+// Test the connection from your browser console
+async function testNexus() {
+  try {
+    const reply = await askNexus("Say hello and introduce yourself as NEXUS AI.");
+    console.log("NEXUS AI:", reply);
+    return reply;
+  } catch (error) {
+    console.error("NEXUS AI error:", error.message);
+    return "Connection failed: " + error.message;
+  }
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
